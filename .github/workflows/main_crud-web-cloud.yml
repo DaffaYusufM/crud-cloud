@@ -1,40 +1,25 @@
-name: Build and Deploy PHP App to Azure Web App
+name: Deploy PHP App to Azure Web App - Crud-Web-Cloud
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # ==========================
-      # 🔐 Login ke Azure — WAJIB
-      # ==========================
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_FE1026B341B7437EB251FCCFDE846535 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_7F32BA568A364F9896B620F933BCC8A1 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_4F4E98A2A3894835A66F09C7ED19903C }}
-
-      # ==========================
-      # 🔧 ZIP aplikasi
-      # ==========================
       - name: Create ZIP package
-        run: zip -r php-app.zip ./
+        run: zip -r app.zip .
 
-      # ==========================
-      # 🚀 Deploy ke Azure
-      # ==========================
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: Crud-Web-Cloud
-          package: php-app.zip
-          slot-name: production
+          app-name: 'Crud-Web-Cloud'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+          package: app.zip
