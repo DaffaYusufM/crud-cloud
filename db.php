@@ -3,7 +3,7 @@ $host = getenv("AZURE_MYSQL_HOST");
 $user = getenv("AZURE_MYSQL_USERNAME");
 $pass = getenv("AZURE_MYSQL_PASSWORD");
 $db   = getenv("AZURE_MYSQL_DBNAME");
-$port = getenv("AZURE_MYSQL_PORT");
+$port = intval(getenv("AZURE_MYSQL_PORT"));
 
 // Init connection
 $connection = mysqli_init();
@@ -18,7 +18,8 @@ mysqli_real_connect(
     $pass,
     $db,
     $port,
-    MYSQLI_CLIENT_SSL
+    NULL,                // socket harus NULL
+    MYSQLI_CLIENT_SSL   // flags SSL di parameter terakhir
 );
 
 if (mysqli_connect_errno()) {
