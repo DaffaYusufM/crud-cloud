@@ -13,15 +13,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Zip project
+        run: zip -r php-app.zip .
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: php-app
-          path: ./
+          path: php-app.zip
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: php-app
+          path: .
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: YOUR_APP_NAME
+          app-name: Crud-Web-Cloud
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
-          package: php-app
+          package: php-app.zip
