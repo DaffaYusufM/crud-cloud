@@ -1,15 +1,33 @@
 <?php
 include 'db.php';
-$id = $_GET['id'];
-$data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT * FROM mahasiswa WHERE id=$id"));
+
+$id = intval($_GET['id']); // memastikan ID adalah angka
+
+// Ambil data mahasiswa
+$stmt = mysqli_prepare($connection, "SELECT nama, nim, prodi FROM mahasiswa WHERE id = ?");
+mysqli_stmt_bind_param($stmt, "i", $id);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+$data = mysqli_fetch_assoc($result);
+
+if (!$data) {
+    die("Data tidak ditemukan");
+}
 
 if (isset($_POST['submit'])) {
     $nama = $_POST['nama'];
     $nim = $_POST['nim'];
     $prodi = $_POST['prodi'];
 
-    mysqli_query($connection, "UPDATE mahasiswa SET nama='$nama', nim='$nim', prodi='$prodi' WHERE id=$id");
+    // Update database secara aman
+    $update = mysqli_prepare($connection,
+        "UPDATE mahasiswa SET nama = ?, nim = ?, prodi = ? WHERE id = ?"
+    );
+    mysqli_stmt_bind_param($update, "sssi", $nama, $nim, $prodi, $id);
+    mysqli_stmt_execute($update);
+
     header("Location: index.php");
+    exit;
 }
 ?>
 <!DOCTYPE html>
