@@ -6,8 +6,14 @@ if (isset($_POST['submit'])) {
     $nim = $_POST['nim'];
     $prodi = $_POST['prodi'];
 
-    mysqli_query($connection, "INSERT INTO mahasiswa(nama, nim, prodi) VALUES('$nama','$nim','$prodi')");
+    $stmt = mysqli_prepare($connection, 
+        "INSERT INTO mahasiswa (nama, nim, prodi) VALUES (?, ?, ?)"
+    );
+    mysqli_stmt_bind_param($stmt, "sss", $nama, $nim, $prodi);
+    mysqli_stmt_execute($stmt);
+
     header("Location: index.php");
+    exit;
 }
 ?>
 <!DOCTYPE html>
