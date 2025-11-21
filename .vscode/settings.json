@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/2a14c2d5-6617-4283-8d95-ccf7c8e9c2e3/resourceGroups/daffa-cloud/providers/Microsoft.Web/sites/Crud-Web-Cloud",
+    "appService.deploySubpath": "."
+}
