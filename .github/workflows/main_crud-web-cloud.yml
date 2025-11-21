@@ -66,5 +66,5 @@ jobs:
         with:
           app-name: 'Crud-Web-Cloud'
           slot-name: 'Production'
-          package: .
+          package: './'
           
