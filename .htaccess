@@ -1,7 +1,10 @@
-DirectoryIndex index.php index.html
+location / {
+    try_files $uri $uri/ /index.php?$query_string;
+}
 
-# Jika perlu rewrite rules untuk clean URL
-RewriteEngine On
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php?$1 [L,QSA]
+location ~ \.php$ {
+    fastcgi_pass 127.0.0.1:9000;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    include fastcgi_params;
+}
